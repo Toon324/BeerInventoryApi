@@ -5,35 +5,41 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Swashbuckle.Swagger.Annotations;
+using BeerInventory.Services;
 
 namespace BeerInventory.Controllers
 {
-    public class ValuesController : ApiController
+    public class InventoryController : ApiController
     {
-        // GET api/values
+        InventoryService inventoryService = new InventoryService();
+        BeerDetailsService beerService = new BeerDetailsService();
+
+        // GET api/iventory
         [SwaggerOperation("GetAll")]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return inventoryService.GetInventory("Cody").Select(x => x.ToString());
         }
 
-        // GET api/values/5
+        // GET api/iventory/5
         [SwaggerOperation("GetById")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        public string Get(int id)
+        public string Get(String id)
         {
-            return "value";
+            return "";
         }
 
-        // POST api/values
+        // POST api/iventory/AddBeer
         [SwaggerOperation("Create")]
         [SwaggerResponse(HttpStatusCode.Created)]
-        public void Post([FromBody]string value)
+        public void AddBeer(string brewer, string beerName, string upc)
         {
+            beerService.AddBeerDetails(upc, brewer, beerName);
+            inventoryService.AddBeerToInventory("Cody", "Fridge", upc, 1);
         }
 
-        // PUT api/values/5
+        // PUT api/iventory/5
         [SwaggerOperation("Update")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
@@ -41,7 +47,7 @@ namespace BeerInventory.Controllers
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/iventory/5
         [SwaggerOperation("Delete")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
