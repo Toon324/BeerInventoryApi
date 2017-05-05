@@ -43,7 +43,7 @@ namespace BeerInventory.Models
 
         public override string ToString()
         {
-            return "[" + Barcode + "] " + Brewer + " - " + Name + " " + ABV + "%";
+            return "[" + Barcode + "] " + Brewer + " - " + Name + " " + ABV + "%" + "  " + Description;
         }
     }
 }

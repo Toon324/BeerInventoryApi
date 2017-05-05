@@ -15,5 +15,15 @@ namespace BeerInventory.Tests
 
             Console.WriteLine(beer);
         }
+
+        [TestMethod]
+        public void Test2()
+        {
+            var service = new BeerDetailsService();
+
+            var beer = service.GetBeerDetails("793866530018");
+
+            Console.WriteLine();
+        }
     }
 }

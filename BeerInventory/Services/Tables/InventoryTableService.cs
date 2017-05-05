@@ -11,26 +11,18 @@ namespace BeerInventory.Services
     {
         public InventoryTableService() : base("Inventory") { }
 
-        private List<InventoryEntity> GetAvailable()
+        private List<InventoryEntity> GetAvailable(String owner, String location)
         {
             var table = GetTable();
 
-            var results = table.ExecuteQuery(new TableQuery<InventoryEntity>()
-                .Where(TableQuery.GenerateFilterConditionForInt("Count", QueryComparisons.GreaterThan, 0)));
-
-            return results.ToList();
+            return table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner && x.Location == location &&  x.Count > 0).ToList();
         }
 
         public List<InventoryEntity> GetAvailable(String owner)
         {
             var table = GetTable();
 
-            var results = table.ExecuteQuery(new TableQuery<InventoryEntity>()
-                .Where(TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, owner),
-                    TableOperators.And,
-                    TableQuery.GenerateFilterConditionForInt("Count", QueryComparisons.GreaterThan, 0)
-                    )));
+            var results = table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner && x.Count > 0);
 
             if (!results.Any())
             {
@@ -44,10 +36,7 @@ namespace BeerInventory.Services
         {
             var table = GetTable();
 
-            var results = table.ExecuteQuery(new TableQuery<InventoryEntity>()
-                .Where(
-                    TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, owner)
-                    ));
+            var results = table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner);
 
             if (!results.Any())
             {
@@ -61,16 +50,7 @@ namespace BeerInventory.Services
         {
             var table = GetTable();
 
-            var results = table.ExecuteQuery(new TableQuery<InventoryEntity>()
-                .Where(
-                TableQuery.CombineFilters(
-                    TableQuery.CombineFilters(
-                        TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, owner),
-                        TableOperators.And,
-                        TableQuery.GenerateFilterCondition("Location", QueryComparisons.GreaterThan, location)),
-                TableOperators.And,
-                TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, upc)
-                    )));
+            var results = table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner && x.Location == location && x.RowKey == upc);
 
             if (!results.Any())
             {
@@ -78,20 +58,6 @@ namespace BeerInventory.Services
             }
 
             return results.First();
-        }
-
-        public void AddToStock(String location, String upc)
-        {
-            var table = GetTable();
-
-            var result = table.Execute(TableOperation.Retrieve<InventoryEntity>(location, upc)).Result;
-
-            var entity = (InventoryEntity)result;
-
-            entity.Count++;
-            entity.LastAdded = DateTime.Now.Date;
-
-            table.Execute(TableOperation.Replace(entity));
         }
     }
 }
