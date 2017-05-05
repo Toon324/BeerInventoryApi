@@ -31,7 +31,7 @@ namespace BeerInventory.Models
 
         public override string ToString()
         {
-            return "[" + Barcode + "] " + Owner + " | " + Location + " : " + Count + "  Last added: " + LastAdded;
+            return "[" + Barcode + "] " + Owner + " | " + Location + " : " + Count + "  Last added: " + LastAdded.ToString("MM/dd/yyyy");
         }
     }
 }
