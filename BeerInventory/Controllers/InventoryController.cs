@@ -25,9 +25,9 @@ namespace BeerInventory.Controllers
         [SwaggerOperation("GetById")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        public string Get(String id)
+        public string Get(String upc)
         {
-            return "";
+            return beerService.GetBeerDetails(upc).ToString();
         }
 
         // POST api/iventory/AddBeer

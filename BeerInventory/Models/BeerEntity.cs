@@ -8,12 +8,12 @@ namespace BeerInventory.Models
 {
     public class BeerEntity : TableEntity
     {
-        public BeerEntity(string brewer, string beername)
+        public BeerEntity(string brewer, string upc)
         {
             PartitionKey = brewer;
-            RowKey = beername;
+            RowKey = upc;
             Brewer = brewer;
-            Name = beername;
+            Barcode = upc;
         }
 
         public BeerEntity() { }
@@ -43,7 +43,7 @@ namespace BeerInventory.Models
 
         public override string ToString()
         {
-            return "[" + Barcode + "] " + Brewer + " - " + Name;
+            return "[" + Barcode + "] " + Brewer + " - " + Name + " " + ABV + "%";
         }
     }
 }

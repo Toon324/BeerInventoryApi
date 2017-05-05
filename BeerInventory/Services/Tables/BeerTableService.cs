@@ -16,7 +16,7 @@ namespace BeerInventory.Services
             var table = GetTable();
 
             var results = table.ExecuteQuery(new TableQuery<BeerEntity>()
-                .Where(TableQuery.GenerateFilterCondition("Barcode", QueryComparisons.Equal, upc)));
+                .Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, upc)));
 
             if (!results.Any())
             {

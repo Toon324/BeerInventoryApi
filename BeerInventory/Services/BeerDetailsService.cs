@@ -1,6 +1,7 @@
 ﻿using BeerInventory.Models;
 using BreweryDB;
 using BreweryDB.Models;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -20,14 +21,28 @@ namespace BeerInventory.Services
             return new BreweryDbClient(ConfigurationManager.AppSettings["BreweryDbKey"]);
         }
 
-        public Beer FetchBeerInfoFromDb(String brewery, String beer)
+        public List<dynamic> Search(string query)
+        {
+            var client = new RestClient("http://api.brewerydb.com");
+            var request = new RestRequest("/v2/search", Method.GET);
+            request.AddQueryParameter("key", ConfigurationManager.AppSettings["BreweryDbKey"]);
+            request.AddQueryParameter("q", query);
+            request.AddQueryParameter("type", "beer");
+            request.AddQueryParameter("withBreweries", "y");
+            request.AddQueryParameter("hasLabels", "y");
+            request.AddQueryParameter("withIngredients", "y");
+            request.AddQueryParameter("withGuilds", "y");
+
+            var result = client.Execute<ResponseContainer<List<dynamic>>>(request);
+            return result.Data.Data;
+        }
+
+        public dynamic FetchBeerInfoFromDb(String brewery, String beer)
         {
             Trace.TraceInformation("Searching for " + brewery + " " + beer);
-            var client = GetClient();
-            var query = client.Beers.Search(brewery + " " + beer);
-            var results = query.Result;
-            Trace.TraceInformation("Found " + results.TotalResults + " results");
-            return results.Data.First();
+            var results = Search(brewery + " " + beer);
+            Trace.TraceInformation("Found " + results.Count() + " results");
+            return results.First();
         }
 
         public bool BeerDetailsExists(string upc)
@@ -44,19 +59,19 @@ namespace BeerInventory.Services
         {
             var details = FetchBeerInfoFromDb(brewery, beerName);
 
-            Trace.TraceInformation("Search found " + details.Name + " made by " + details.Brewery);
-
-            var beer = new BeerEntity(details.Brewery, upc)
+            var beer = new BeerEntity(details["breweries"][0]["name"], upc)
             {
-                Name = details.Name,
-                ABV = details.Abv,
-                Availablity = details.Available.Description,
-                Type = details.Style.Name,
-                Glass = details.Glass.Name,
-                Description = details.Description,
-                LabelUrl = details.Labels.Medium,
-                BrewSeason = details.Available.Name
+                Name = details["name"],
+                ABV = Double.Parse(details["abv"]),
+                Availablity = details["available"]["description"],
+                Type = details["style"]["name"],
+                Glass = details["glass"]["name"],
+                Description = details["description"],
+                LabelUrl = details["labels"]["medium"],
+                BrewSeason = details["available"]["name"]
             };
+
+            Trace.TraceInformation("Adding " + beer.Name + " brewed by " + beer.Brewer);
 
             beerService.AddOrUpdate(beer);
 
