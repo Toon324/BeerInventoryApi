@@ -22,35 +22,28 @@ namespace BeerInventory.Services
         {
             var table = GetTable();
 
-            var results = table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner && x.Count > 0);
-
-            if (!results.Any())
-            {
-                return new List<InventoryEntity>();
-            }
-
-            return results.ToList();
+            return table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner && x.Count > 0).ToList();
         }
 
         public List<InventoryEntity> GetAll(String owner)
         {
             var table = GetTable();
 
-            var results = table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner);
-
-            if (!results.Any())
-            {
-                return new List<InventoryEntity>();
-            }
-
-            return results.ToList();
+            return table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner).ToList();
         }
 
-        public InventoryEntity Get(String owner, String location, String upc)
+        public List<InventoryEntity> GetAll(String owner, String location)
         {
             var table = GetTable();
 
-            var results = table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner && x.Location == location && x.RowKey == upc);
+            return table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner && x.Location == location).ToList();
+        }
+
+        public InventoryEntity Get(String owner, String location, String id)
+        {
+            var table = GetTable();
+
+            var results = table.CreateQuery<InventoryEntity>().Where(x => x.PartitionKey == owner && x.Location == location && x.Id == id).ToList();
 
             if (!results.Any())
             {

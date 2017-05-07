@@ -167,19 +167,26 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BeerController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BeerEntity.cs" />
     <Compile Include="Models\DbBeer.cs" />
+    <Compile Include="Models\InventoryDetails.cs" />
     <Compile Include="Models\InventoryEntity.cs" />
+    <Compile Include="Models\UpcEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\BeerDetailsService.cs" />
-    <Compile Include="Services\InventoryService.cs" />
+    <Compile Include="Services\InventoryManagmentService.cs" />
+    <Compile Include="Services\TableWrappers\BeerDetailsService.cs" />
+    <Compile Include="Services\TableWrappers\InventoryService.cs" />
+    <Compile Include="Services\ProductManagementService.cs" />
     <Compile Include="Services\Tables\AzureTableService.cs" />
+    <Compile Include="Services\Tables\UpcTableService.cs" />
     <Compile Include="Services\Tables\InventoryTableService.cs" />
     <Compile Include="Services\Tables\BeerTableService.cs" />
+    <Compile Include="Services\TableWrappers\UpcService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

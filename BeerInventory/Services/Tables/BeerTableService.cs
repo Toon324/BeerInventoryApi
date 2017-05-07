@@ -11,11 +11,11 @@ namespace BeerInventory.Services
     {
         public BeerTableService() : base("BeerDetails") { }
 
-        public BeerEntity GetByUpc(String upc)
+        public BeerEntity GetById(String id)
         {
             var table = GetTable();
 
-            var results = table.CreateQuery<BeerEntity>().Where(x => x.RowKey == upc).ToList();
+            var results = table.CreateQuery<BeerEntity>().Where(x => x.RowKey == id).ToList();
 
             if (!results.Any())
             {
@@ -25,5 +25,13 @@ namespace BeerInventory.Services
             return results.First();
         }
 
+        public IEnumerable<BeerEntity> GetAll()
+        {
+            var table = GetTable();
+
+            var results = table.CreateQuery<BeerEntity>().ToList();
+
+            return results;
+        }
     }
 }

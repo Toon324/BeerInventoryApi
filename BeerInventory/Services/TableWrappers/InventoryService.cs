@@ -10,21 +10,20 @@ namespace BeerInventory.Services
     {
         InventoryTableService inventoryService = new InventoryTableService();
 
-        public bool BeerExistsInInventory(string owner, string location, string upc)
+        public bool BeerExistsInInventory(string owner, string location, string id)
         {
-            return inventoryService.Get(owner, location, upc) != null;
+            return inventoryService.Get(owner, location, id) != null;
         }
 
-        public void AddBeerToInventory(string owner, string location, string upc, int count)
+        public void AddBeerToInventory(string owner, string location, string id, int count)
         {
-            var stock = inventoryService.Get(owner, location, upc);
+            var stock = inventoryService.Get(owner, location, id);
 
             if (stock == null)
             {
-                stock = new InventoryEntity(owner, upc)
+                stock = new InventoryEntity(owner, location, id)
                 {
-                    Count = 0,
-                    Location = location
+                    Count = 0
                 };
             }
 
@@ -37,6 +36,11 @@ namespace BeerInventory.Services
         public List<InventoryEntity> GetInventory(string owner)
         {
             return inventoryService.GetAll(owner);
+        }
+
+        public List<InventoryEntity> GetInventory(string owner, string location)
+        {
+            return inventoryService.GetAll(owner, location);
         }
     }
 }

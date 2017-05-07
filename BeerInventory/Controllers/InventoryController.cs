@@ -6,40 +6,46 @@ using System.Net.Http;
 using System.Web.Http;
 using Swashbuckle.Swagger.Annotations;
 using BeerInventory.Services;
+using System.Text;
 
 namespace BeerInventory.Controllers
 {
     public class InventoryController : ApiController
     {
-        InventoryService inventoryService = new InventoryService();
-        BeerDetailsService beerService = new BeerDetailsService();
+        InventoryManagmentService inventoryService = new InventoryManagmentService();
 
-        // GET api/iventory
-        [SwaggerOperation("GetAll")]
-        public IEnumerable<string> Get()
+        // GET api/inventory/user?location=X
+        public IEnumerable<string> Get(String id, String location)
         {
-            return inventoryService.GetInventory("Cody").Select(x => x.ToString());
+            return inventoryService.GetInventoryWithDetails(id).Select(x => x.ToString());
         }
 
-        // GET api/iventory/5
+        // GET api/inventory/user
         [SwaggerOperation("GetById")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        public string Get(String upc)
+        public IEnumerable<string> Get(String id)
         {
-            return beerService.GetBeerDetails(upc).ToString();
+            return inventoryService.GetInventoryWithDetails(id).Select(x => x.ToString());
         }
 
-        // POST api/iventory/AddBeer
+        // POST api/inventory/5?user=X&location=X
         [SwaggerOperation("Create")]
         [SwaggerResponse(HttpStatusCode.Created)]
-        public void AddBeer(string brewer, string beerName, string upc)
+        public void Post(String id, String user, String location)
         {
-            beerService.AddBeerDetails(upc, brewer, beerName);
-            inventoryService.AddBeerToInventory("Cody", "Fridge", upc, 1);
+            inventoryService.AddBeerToInventory(user, location, id, 1);
         }
 
-        // PUT api/iventory/5
+        // POST api/inventory/5?user=X&location=X&count=5
+        [SwaggerOperation("Create")]
+        [SwaggerResponse(HttpStatusCode.Created)]
+        public void Post(String id, String user, String location, int count)
+        {
+            inventoryService.AddBeerToInventory(user, location, id, count);
+        }
+
+        // PUT api/inventory/5
         [SwaggerOperation("Update")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
@@ -47,7 +53,7 @@ namespace BeerInventory.Controllers
         {
         }
 
-        // DELETE api/iventory/5
+        // DELETE api/inventory/5
         [SwaggerOperation("Delete")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]

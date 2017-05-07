@@ -15,12 +15,6 @@ namespace BeerInventory.Services
     {
         BeerTableService beerService = new BeerTableService();
 
-        private BreweryDbClient GetClient()
-        {
-            Trace.TraceInformation("Using BreweryDB Key " + ConfigurationManager.AppSettings["BreweryDbKey"]);
-            return new BreweryDbClient(ConfigurationManager.AppSettings["BreweryDbKey"]);
-        }
-
         public List<dynamic> Search(string query)
         {
             var client = new RestClient("http://api.brewerydb.com");
@@ -31,10 +25,16 @@ namespace BeerInventory.Services
             request.AddQueryParameter("withBreweries", "y");
             request.AddQueryParameter("hasLabels", "y");
             request.AddQueryParameter("withIngredients", "y");
-            request.AddQueryParameter("withGuilds", "y");
 
             var result = client.Execute<ResponseContainer<List<dynamic>>>(request);
             return result.Data.Data;
+        }
+
+        public IEnumerable<BeerEntity> GetAll() => beerService.GetAll();
+
+        internal void Add(BeerEntity beer)
+        {
+            beerService.AddOrUpdate(beer);
         }
 
         public dynamic FetchBeerInfoFromDb(String brewery, String beer)
@@ -45,21 +45,21 @@ namespace BeerInventory.Services
             return results.First();
         }
 
-        public bool BeerDetailsExists(string upc)
+        public bool BeerDetailsExists(string id)
         {
-            return beerService.GetByUpc(upc) != null;
+            return beerService.GetById(id) != null;
         }
 
-        public BeerEntity GetBeerDetails(string upc)
+        public BeerEntity GetBeerDetails(string id)
         {
-            return beerService.GetByUpc(upc);
+            return beerService.GetById(id);
         }
 
-        public BeerEntity AddBeerDetails(string upc, string brewery, string beerName)
+        public BeerEntity AddBeerDetails(string brewery, string beerName)
         {
             var details = FetchBeerInfoFromDb(brewery, beerName);
 
-            var beer = new BeerEntity(details["breweries"][0]["name"], upc)
+            var beer = new BeerEntity(details["breweries"][0]["name"], details["id"])
             {
                 Name = details["name"],
                 ABV = Double.Parse(details["abv"]),

@@ -8,18 +8,19 @@ namespace BeerInventory.Models
 {
     public class InventoryEntity : TableEntity
     {
-        public InventoryEntity(String owner, String UPC)
+        public InventoryEntity(String owner, String location, String Id)
         {
             PartitionKey = owner;
-            RowKey = UPC;
+            RowKey = location + "|" + Id;
 
             Owner = owner;
-            Barcode = UPC;
+            Location = location;
+            this.Id = Id;
         }
 
         public InventoryEntity() { }
 
-        public string Barcode { get; set; }
+        public string Id { get; set; }
 
         public string Owner { get; set; }
 
@@ -31,7 +32,7 @@ namespace BeerInventory.Models
 
         public override string ToString()
         {
-            return "[" + Barcode + "] " + Owner + " | " + Location + " : " + Count + "  Last added: " + LastAdded.ToString("MM/dd/yyyy");
+            return "[" + Id + "] " + Owner + " | " + Location + " : " + Count + "  Last added: " + LastAdded.ToString("MM/dd/yyyy");
         }
     }
 }
