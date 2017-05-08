@@ -31,7 +31,7 @@ namespace BeerInventory.Controllers
 
         // POST api/inventory/5?user=X&location=X
         [SwaggerOperation("Create")]
-        [SwaggerResponse(HttpStatusCode.Created)]
+        [SwaggerResponse(HttpStatusCode.Accepted)]
         public void Post(String id, String user, String location)
         {
             inventoryService.AddBeerToInventory(user, location, id, 1);
@@ -39,7 +39,7 @@ namespace BeerInventory.Controllers
 
         // POST api/inventory/5?user=X&location=X&count=5
         [SwaggerOperation("Create")]
-        [SwaggerResponse(HttpStatusCode.Created)]
+        [SwaggerResponse(HttpStatusCode.Accepted)]
         public void Post(String id, String user, String location, int count)
         {
             inventoryService.AddBeerToInventory(user, location, id, count);

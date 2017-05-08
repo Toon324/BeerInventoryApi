@@ -28,19 +28,25 @@ namespace BeerInventory.Services
             }
 
             stock.LastAdded = DateTime.Now.Date;
+
             stock.Count += count;
+
+            if (stock.Count < 0)
+            {
+                stock.Count = 0;
+            }
 
             inventoryService.AddOrUpdate(stock);
         }
 
         public List<InventoryEntity> GetInventory(string owner)
         {
-            return inventoryService.GetAll(owner);
+            return inventoryService.GetAll(owner).Where(x => String.IsNullOrEmpty(x.Id)).ToList();
         }
 
         public List<InventoryEntity> GetInventory(string owner, string location)
         {
-            return inventoryService.GetAll(owner, location);
+            return inventoryService.GetAll(owner, location).Where(x => String.IsNullOrEmpty(x.Id)).ToList();
         }
     }
 }

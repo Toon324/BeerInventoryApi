@@ -18,6 +18,11 @@ namespace BeerInventory.Services
         public List<BeerEntity> AddBeerToInventory(String owner, String location, String upc, int count)
         {
             var products = upcService.GetProductIds(upc);
+            
+            if (!products.Any())
+            {
+                return null;
+            }
 
             // If multiple products are associated with this barcode, we need help determining what's what, so we return options
             if (products.Count > 1)
@@ -29,7 +34,7 @@ namespace BeerInventory.Services
 
             inventoryService.AddBeerToInventory(owner, location, id, count);
 
-            return null;
+            return new List<BeerEntity> { beerService.GetBeerDetails(id) };
         }
 
         public void AddBeerToInventoryById(String owner, String location, String id, int count) => inventoryService.AddBeerToInventory(owner, location, id, count);
