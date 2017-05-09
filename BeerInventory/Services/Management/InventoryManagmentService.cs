@@ -10,10 +10,14 @@ namespace BeerInventory.Services
     {
         UpcService upcService = new UpcService();
 
-        BeerDetailsService beerService = new BeerDetailsService();
+        ProductManagementService beerService = new ProductManagementService();
 
-        InventoryService inventoryService = new InventoryService();
+        InventoryTableService inventoryService = new InventoryTableService();
 
+        public bool BeerExistsInInventory(string owner, string location, string id)
+        {
+            return inventoryService.Get(owner, location, id) != null;
+        }
 
         public List<BeerEntity> AddBeerToInventory(String owner, String location, String upc, int count)
         {
@@ -32,16 +36,38 @@ namespace BeerInventory.Services
 
             var id = products.First();
 
-            inventoryService.AddBeerToInventory(owner, location, id, count);
+            AddBeerToInventoryById(owner, location, id, count);
 
             return new List<BeerEntity> { beerService.GetBeerDetails(id) };
         }
 
-        public void AddBeerToInventoryById(String owner, String location, String id, int count) => inventoryService.AddBeerToInventory(owner, location, id, count);
+        private void AddBeerToInventoryById(string owner, string location, string id, int count)
+        {
+            var stock = inventoryService.Get(owner, location, id);
 
-        public List<InventoryEntity> GetInventory(String owner) => inventoryService.GetInventory(owner);
+            if (stock == null)
+            {
+                stock = new InventoryEntity(owner, location, id)
+                {
+                    Count = 0
+                };
+            }
 
-        public List<InventoryEntity> GetInventory(String owner, String location) => inventoryService.GetInventory(owner, location);
+            stock.LastAdded = DateTime.Now.Date;
+
+            stock.Count += count;
+
+            if (stock.Count < 0)
+            {
+                stock.Count = 0;
+            }
+
+            inventoryService.AddOrUpdate(stock);
+        }
+
+        public List<InventoryEntity> GetInventory(String owner) => inventoryService.GetAll(owner).Where(x => !String.IsNullOrEmpty(x.Id)).ToList();
+
+        public List<InventoryEntity> GetInventory(String owner, String location) => inventoryService.GetAll(owner, location).Where(x => !String.IsNullOrEmpty(x.Id)).ToList();
 
         public List<InventoryDetails> GetInventoryWithDetails(String owner)
         {

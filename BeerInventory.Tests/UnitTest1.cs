@@ -19,11 +19,18 @@ namespace BeerInventory.Tests
         [TestMethod]
         public void Test2()
         {
-            var service = new BeerDetailsService();
+            var service = new BeerTableService();
 
-            var beer = service.GetBeerDetails("793866530018");
+            var results = service.GetAll();
 
-            Console.WriteLine();
+            foreach (var beer in results)
+            {
+                if (string.IsNullOrEmpty(beer.Id))
+                {
+                    service.Remove(beer);
+                    Console.WriteLine("removed " + beer.Name);
+                }
+            }
         }
 
         [TestMethod]

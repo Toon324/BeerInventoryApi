@@ -33,5 +33,12 @@ namespace BeerInventory.Services
 
             return results;
         }
+
+        public void Remove(BeerEntity beer)
+        {
+            var table = GetTable();
+
+            table.Execute(TableOperation.Delete(beer));
+        }
     }
 }

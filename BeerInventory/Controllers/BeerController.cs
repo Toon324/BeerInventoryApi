@@ -12,7 +12,7 @@ namespace BeerInventory.Controllers
 {
     public class BeerController : ApiController
     {
-        InventoryService inventoryService = new InventoryService();
+        InventoryManagmentService inventoryService = new InventoryManagmentService();
         ProductManagementService beerService = new ProductManagementService();
 
         // GET api/beer
