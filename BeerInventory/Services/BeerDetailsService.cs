@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
 
 namespace BeerInventory.Services
 {
@@ -32,10 +31,18 @@ namespace BeerInventory.Services
 
         public dynamic FetchBeerInfoFromDb(String brewery, String beer)
         {
-            Trace.TraceInformation("Searching for " + brewery + " " + beer);
-            var results = Search(brewery + " " + beer);
-            Trace.TraceInformation("Found " + results.Count() + " results");
-            return results.First();
+            try
+            {
+                Trace.TraceInformation("Searching for " + brewery + " " + beer);
+                var results = Search(brewery + " " + beer);
+                Trace.TraceInformation("Found " + results.Count() + " results");
+                return results.First();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                return null;
+            }
         }
     }
 }

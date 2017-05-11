@@ -7,6 +7,7 @@ using System.Web.Http;
 using Swashbuckle.Swagger.Annotations;
 using BeerInventory.Services;
 using System.Text;
+using BeerInventory.Models;
 
 namespace BeerInventory.Controllers
 {
@@ -24,9 +25,9 @@ namespace BeerInventory.Controllers
         [SwaggerOperation("GetById")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        public IEnumerable<string> Get(String id)
+        public IEnumerable<InventoryDetails> Get(String id)
         {
-            return inventoryService.GetInventoryWithDetails(id).Select(x => x.ToString());
+            return inventoryService.GetInventoryWithDetails(id);
         }
 
         // POST api/inventory/5?user=X&location=X

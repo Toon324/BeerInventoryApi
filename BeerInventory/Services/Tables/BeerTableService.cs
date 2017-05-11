@@ -13,9 +13,7 @@ namespace BeerInventory.Services
 
         public BeerEntity GetById(String id)
         {
-            var table = GetTable();
-
-            var results = table.CreateQuery<BeerEntity>().Where(x => x.RowKey == id).ToList();
+            var results = Table.CreateQuery<BeerEntity>().Where(x => x.RowKey == id).ToList();
 
             if (!results.Any())
             {
@@ -25,20 +23,11 @@ namespace BeerInventory.Services
             return results.First();
         }
 
-        public IEnumerable<BeerEntity> GetAll()
+        public List<BeerEntity> GetAll()
         {
-            var table = GetTable();
-
-            var results = table.CreateQuery<BeerEntity>().ToList();
-
-            return results;
+            return Table.CreateQuery<BeerEntity>().ToList();
         }
 
-        public void Remove(BeerEntity beer)
-        {
-            var table = GetTable();
-
-            table.Execute(TableOperation.Delete(beer));
-        }
+        public void Remove(BeerEntity beer) => Table.Execute(TableOperation.Delete(beer));
     }
 }

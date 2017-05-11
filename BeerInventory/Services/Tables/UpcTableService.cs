@@ -13,9 +13,7 @@ namespace BeerInventory.Services
 
         public List<UpcEntity> GetByUpc(String upc)
         {
-            var table = GetTable();
-
-            var results = table.CreateQuery<UpcEntity>().Where(x => x.UPC == upc).ToList();
+            var results = Table.CreateQuery<UpcEntity>().Where(x => x.UPC == upc).ToList();
 
             if (!results.Any())
             {

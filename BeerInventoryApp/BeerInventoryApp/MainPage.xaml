@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BeerInventoryApp"
+             x:Class="BeerInventoryApp.MainPage">
+
+    <StackLayout Margin="20">
+        <Label Text="Welcome to Xamarin Forms!" 
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" />
+
+        <ListView x:Name="listView" ItemSelected="OnListViewItemSelected" />
+
+        <Editor x:Name="editor" HeightRequest="100" IsEnabled="false" />
+    </StackLayout>
+</ContentPage>

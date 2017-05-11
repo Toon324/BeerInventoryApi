@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BeerInventory.Services;
+using System.Linq;
 
 namespace BeerInventory.Tests
 {
@@ -23,14 +24,9 @@ namespace BeerInventory.Tests
 
             var results = service.GetAll();
 
-            foreach (var beer in results)
-            {
-                if (string.IsNullOrEmpty(beer.Id))
-                {
-                    service.Remove(beer);
-                    Console.WriteLine("removed " + beer.Name);
-                }
-            }
+            Assert.IsNotNull(results);
+
+            Assert.IsTrue(results.Any());
         }
 
         [TestMethod]
