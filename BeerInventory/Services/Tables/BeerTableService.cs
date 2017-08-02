@@ -29,5 +29,19 @@ namespace BeerInventory.Services
         }
 
         public void Remove(BeerEntity beer) => Table.Execute(TableOperation.Delete(beer));
+
+        public BeerEntity GetByName(string brewery, string beerName)
+        {
+            var results = Table.CreateQuery<BeerEntity>()
+                .Where(x => x.Brewer == brewery &&
+                x.Name == beerName).ToList();
+
+            if (!results.Any())
+            {
+                return null;
+            }
+
+            return results.First();
+        }
     }
 }

@@ -31,6 +31,8 @@ namespace BeerInventory.Services
             AddUpcToProduct(upc, beer.Id, "Beer");
         }
 
+        public BeerEntity GetBeerByName(string brewery, string beerName) => beerService.GetByName(brewery, beerName);
+
         public void AddCustom(string upc, BeerEntity beer)
         {
             beer.Id = upc;

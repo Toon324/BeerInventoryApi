@@ -16,15 +16,21 @@ namespace BeerInventory.Controllers
         ProductManagementService beerService = new ProductManagementService();
 
         // GET api/beer
-        public IEnumerable<string> Get()
+        public IEnumerable<BeerEntity> Get()
         {
-            return beerService.GetAll().Select(x => x.ToString());
+            return beerService.GetAll();
         }
 
         // GET api/beer/5
-        public IEnumerable<string> Get(String id)
+        public IEnumerable<BeerEntity> Get(String id)
         {
-            return beerService.GetBeerForUpc(id).Select(x => x.ToString());
+            return beerService.GetBeerForUpc(id);
+        }
+
+        // GET api/beer?brewery=X&beerName=X
+        public BeerEntity Get(String brewery, String beerName)
+        {
+            return beerService.GetBeerByName(brewery, beerName);
         }
 
         // POST api/beer?upc=X

@@ -8,6 +8,7 @@ using Swashbuckle.Swagger.Annotations;
 using BeerInventory.Services;
 using System.Text;
 using BeerInventory.Models;
+using System.Diagnostics;
 
 namespace BeerInventory.Controllers
 {
@@ -35,6 +36,7 @@ namespace BeerInventory.Controllers
         [SwaggerResponse(HttpStatusCode.Accepted)]
         public void Post(String id, String user, String location)
         {
+            
             inventoryService.AddBeerToInventory(user, location, id, 1);
         }
 

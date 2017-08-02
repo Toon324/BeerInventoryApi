@@ -22,7 +22,23 @@ namespace BeerInventory.Services
         public List<BeerEntity> AddBeerToInventory(String owner, String location, String upc, int count)
         {
             var products = upcService.GetProductIds(upc);
-            
+
+            if (!products.Any())
+            {
+                try
+                {
+                    var beer = beerService.GetBeerDetails(upc);
+                    if (beer != null)
+                    {
+                        products.Add(upc);
+                    }
+                }
+                catch (Exception e)
+                {
+                    
+                }
+            }
+
             if (!products.Any())
             {
                 return null;
