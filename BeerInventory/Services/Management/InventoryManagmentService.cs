@@ -91,7 +91,7 @@ namespace BeerInventory.Services
 
             var inventory = GetInventory(owner);
 
-            foreach (var beer in inventory)
+            foreach (var beer in inventory.Where(x => x.Count > 0))
             {
                 toReturn.Add(new InventoryDetails(beerService.GetBeerDetails(beer.Id), beer));
             }

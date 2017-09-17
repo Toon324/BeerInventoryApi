@@ -22,9 +22,9 @@ namespace BeerInventory.Controllers
         }
 
         // GET api/beer/5
-        public IEnumerable<BeerEntity> Get(String id)
+        public BeerEntity Get(String id)
         {
-            return beerService.GetBeerForUpc(id);
+            return beerService.GetBeerDetails(id);
         }
 
         // GET api/beer?brewery=X&beerName=X
