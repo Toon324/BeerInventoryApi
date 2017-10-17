@@ -18,7 +18,7 @@ namespace BeerInventory.Services
 
             if (response.Result.Action != "ShowBeerList")
             {
-                return "I don't deal with this shit";
+                return "I don't deal with this.";
             }
 
             var location = response.Result.Parameters["Location"].ToString().ToUpper();
@@ -32,7 +32,7 @@ namespace BeerInventory.Services
 
             if (string.IsNullOrEmpty(name))
             {
-                return "Who the fuck are you?";
+                return "Who the hell are you?";
             }
 
             if (string.IsNullOrEmpty(location))
