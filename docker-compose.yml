@@ -1,8 +1,0 @@
-version: '2.1'
-
-services:
-  beerinventory:
-    image: beerinventory
-    build:
-      context: .\BeerInventory
-      dockerfile: Dockerfile
