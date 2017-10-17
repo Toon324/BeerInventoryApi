@@ -8,10 +8,10 @@ The API handles the relationship between UPC's and the beer(s) they represent, a
 
 The API additionally offers an endpoint for Api.AI (now known as DialogFlow) to expose data via voice assistants such as Google Assistant with the theming of the oft-drunk character "Archer"
 
-##Roadmap##
-[X] Azure Table Storage integration
-[X] UPC Lookups and Relations
-[X] Beer Detail Lookups via BreweryDB
-[X] API.AI Implementation
-[] End to End Authentication and Encryption
-[] Dockerize for easy load-balancing
+## Roadmap
+- [X] Azure Table Storage integration
+- [X] UPC Lookups and Relations
+- [X] Beer Detail Lookups via BreweryDB
+- [X] API.AI Implementation
+- [ ] End to End Authentication and Encryption
+- [ ] Dockerize for easy load-balancing
